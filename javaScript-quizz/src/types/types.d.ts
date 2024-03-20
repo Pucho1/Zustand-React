@@ -1,4 +1,4 @@
-export interface Question {
+export interface Question { // tipo las preguntas 
   id: number
   question: string
   code: string
