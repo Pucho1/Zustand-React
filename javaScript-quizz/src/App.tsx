@@ -1,4 +1,3 @@
-// import { useState } from 'react'
 import './App.css';
 import { Container, Stack, Typography } from '@mui/material';
 import { JavaScriptLogo } from './JavascriptLogo';
@@ -6,8 +5,9 @@ import Start from './Start';
 import { useQuestionStore } from './store/Questions';
 import Game from './components/Game';
 
+
+// aqui decido que se visualiza por ahoa 
 function App() {
-  // const [count, setCount] = useState(0);
   const questions =  useQuestionStore(state => state.questions); // asi se consume la store del state 
   console.log('estas son las questions -->', questions);
 

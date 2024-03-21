@@ -18,7 +18,6 @@ export const useQuestionStore = create<State>((set) => {
     fetchQuestions : async (limit: number) => {
       const result = await fetch('http://localhost:5173/answer&Question.json');
       const jsonResult =  await result.json();
-      console.log('jsonResult --->', jsonResult)
 
       // desordeno las preguntas y limito el numero de ellas a mostrar segun el limit
       const questions = jsonResult.sort(() => Math.random() - 0,5).slice(0, limit);
