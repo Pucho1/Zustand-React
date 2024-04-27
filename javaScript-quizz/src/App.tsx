@@ -15,7 +15,7 @@ function App() {
     <Container maxWidth="sm">
       <Stack direction='row' gap={2} alignItems='center' justifyContent='center'> {/** ventajas de MUI se pueden meter estilos en linea */}
         <JavaScriptLogo />
-        <Typography variant='h2' component='h1'> Java Script Quitz</Typography>
+        <Typography variant='h2' component='h1'> Java Script Quizz</Typography>
       </Stack>
 
       {questions.length > 0 ? <Game /> : <Start />}
