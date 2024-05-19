@@ -1,5 +1,6 @@
  import { create } from 'zustand';
  import { type Question } from '../types/types';
+import { persist } from 'zustand/middleware';
 import confetti from 'canvas-confetti';
 
 // Define las propiedades que va tener el estado y de que tipo son cada una.
@@ -12,7 +13,8 @@ interface State {
   goPreviousCuestion : () => void
 };
 
-export const useQuestionStore = create<State>((set, get) => {
+// usamos persis para la
+export const useQuestionStore = create<State>()( persist((set, get) => {
 
   // devuelve un objeto que tiene una serie de parametros y funciones que pueden modificar esos parametros   
   return {
@@ -63,14 +65,10 @@ export const useQuestionStore = create<State>((set, get) => {
     },
 
     goNextCuestion: () => {
-      console.log('me ejecuto')
       const {questions, currentquestions} = get();
-      console.log('currentquestions', currentquestions)
-
       const nexQuestion = currentquestions + 1;
-      console.log('nexQuestion', nexQuestion)
 
-      if ( nexQuestion > questions.length) {
+      if ( nexQuestion < questions.length) {
         set({currentquestions : nexQuestion})
       }
     },
@@ -78,10 +76,12 @@ export const useQuestionStore = create<State>((set, get) => {
     goPreviousCuestion: () => {
       const {currentquestions} = get();
       const previousQuestion = currentquestions - 1;
-      if ( previousQuestion < 0) {
+      if ( previousQuestion >= 0) {
         set({currentquestions : previousQuestion})
       }
     }
-
   };
-});
+}, {
+  name: 'question', // nopmbre del espacio en memoria
+  // getStorage: () => localStorage, --------> que tipo de espacioed memoriua se debe reervar
+}));

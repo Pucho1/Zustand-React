@@ -3,6 +3,7 @@ import { useQuestionStore } from '../store/Questions';
 import Question from './Question';
 import { IconButton, Stack } from '@mui/material';
 import { ArrowBackIosNew, ArrowForwardIos } from '@mui/icons-material';
+import Footer from './Footer';
 
 
 // muestro las questions
@@ -17,16 +18,18 @@ const Game = () => {
 
   return (
     <>
-    <Stack direction={'row'} gap={'2'} alignItems={'center'} justifyContent={'center'}>
-      <IconButton onClick={goPreviousCuestion} disabled={currentQuestions === 0}>
-        <ArrowBackIosNew />
-      </IconButton>
-
-      <IconButton onClick={goNextCuestion} disabled={currentQuestions > questions.length - 1}>
-        <ArrowForwardIos />
-      </IconButton>
-    </Stack>
+      <Stack direction={'row'} gap={'2'} alignItems={'center'} justifyContent={'center'}>
+        <IconButton onClick={goPreviousCuestion} disabled={currentQuestions === 0}>
+          <ArrowBackIosNew />
+        </IconButton>
+          {currentQuestions + 1} / {questions.length}
+        <IconButton onClick={goNextCuestion} disabled={currentQuestions >= questions.length - 1}>
+          <ArrowForwardIos />
+        </IconButton>
+      </Stack>
       <Question info={infoQuestion} />
+      <Footer />
+
     </>
   )
 };
