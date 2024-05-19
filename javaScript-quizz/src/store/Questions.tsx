@@ -1,6 +1,6 @@
  import { create } from 'zustand';
  import { type Question } from '../types/types';
-import { persist } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 import confetti from 'canvas-confetti';
 
 // Define las propiedades que va tener el estado y de que tipo son cada una.
@@ -11,18 +11,20 @@ interface State {
   selectedAnswer: (questionId: number, answerIndex: number) => void;
   goNextCuestion : () => void
   goPreviousCuestion : () => void
+  reset : () => void
 };
 
-// usamos persis para la
-export const useQuestionStore = create<State>()( persist((set, get) => {
+// usamos persis para no perder data y dev tioll para la heramientas del navegador "instalar redux devTools"
+export const useQuestionStore = create<State>()(devtools( persist((set, get) => {
 
-  // devuelve un objeto que tiene una serie de parametros y funciones que pueden modificar esos parametros   
+  // devuelve un objeto que tiene una serie de parametros y funciones que pueden modificar esos parametros
   return {
+    //DATOS
     loadin: false,
     questions: [], // se inisializan los datos
     currentquestions:  0,
 
-    // funcion para actulizar las preguntas, paso un numero de preguntas a mostrar
+    // ACCIONES SOBRE LOS DATOS
     fetchQuestions : async (limit: number) => {
       const result = await fetch('http://localhost:5173/answer&Question.json');
       const jsonResult =  await result.json();
@@ -32,7 +34,7 @@ export const useQuestionStore = create<State>()( persist((set, get) => {
       
 
       // con el set se modifican los datos del store
-      set({questions});
+      set({questions}, false, 'HAVE_DATA');
     },
 
     selectedAnswer: ( questionId: number, answerIndex: number) => {
@@ -61,7 +63,7 @@ export const useQuestionStore = create<State>()( persist((set, get) => {
       }
 
       // con el set actualizo cualquiera de mis propiedades que tengo en el store
-      set({questions: newQuestions});
+      set({questions: newQuestions}, false, 'COMPARE_RESPONSE');
     },
 
     goNextCuestion: () => {
@@ -69,7 +71,7 @@ export const useQuestionStore = create<State>()( persist((set, get) => {
       const nexQuestion = currentquestions + 1;
 
       if ( nexQuestion < questions.length) {
-        set({currentquestions : nexQuestion})
+        set({currentquestions : nexQuestion}, false, 'GO_NEXT')
       }
     },
 
@@ -77,11 +79,15 @@ export const useQuestionStore = create<State>()( persist((set, get) => {
       const {currentquestions} = get();
       const previousQuestion = currentquestions - 1;
       if ( previousQuestion >= 0) {
-        set({currentquestions : previousQuestion})
+        set({currentquestions : previousQuestion}, false, 'GO_PREV')
       }
+    },
+    
+    reset: () => {
+      set({currentquestions: 0, questions: []}, false, 'RESET_DATA')
     }
   };
 }, {
   name: 'question', // nopmbre del espacio en memoria
   // getStorage: () => localStorage, --------> que tipo de espacioed memoriua se debe reervar
-}));
+})));

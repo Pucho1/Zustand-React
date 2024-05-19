@@ -1,9 +1,11 @@
 
 import React from 'react'
 import { useQuestionStore } from '../store/Questions';
+import { Button, Stack } from '@mui/material';
 
 const Footer = () => {
   const  questions = useQuestionStore(state => state.questions)
+  const  reset = useQuestionStore(state => state.reset)
 
   let correct = 0;
   let incorrect = 0;
@@ -19,7 +21,10 @@ const Footer = () => {
 
   return (
     <footer style={{ marginTop: "15px"}}>
-      <strong>{`Correctas ${correct}, - Incorrectas: ${incorrect} - No vista ${unanswered} `}</strong>
+      <Stack spacing={2}>
+        <strong>{`Correctas ${correct}, - Incorrectas: ${incorrect} - No vista ${unanswered} `}</strong>
+        <div className="reset"> <Button onClick={reset}>Reset game</Button></div>
+      </Stack>
     </footer>
   )
 }
